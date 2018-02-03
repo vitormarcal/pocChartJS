@@ -1,8 +1,10 @@
 (function () {
 
+    "use strict"
+
     function gerarGrafico(datasets) {
-        var ctx = $('#areaChart').get(0).getContext('2d');
-        var myChart = new Chart(ctx, {
+        let ctx = $('#areaChart').get(0).getContext('2d');
+        let myChart = new Chart(ctx, {
             type: 'line',
             data: {
                 labels: ['Janeiro','Fevereiro','Março','Abril','Maio','Junho',
@@ -28,6 +30,7 @@
     function montarGrafico() {
 
         let promises = [];
+
         promises.push(countQuantidadeVeiculosCompradosMes());
         promises.push(countQuantidadeVeiculosVendidosMes());
 
