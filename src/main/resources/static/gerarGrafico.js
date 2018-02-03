@@ -2,6 +2,23 @@
 
     "use strict";
 
+    $(function onLoadPage() {
+        montarGrafico();
+    });
+
+    function montarGrafico() {
+
+        let promises = [];
+
+        promises.push(countQuantidadeVeiculosCompradosMes());
+        promises.push(countQuantidadeVeiculosVendidosMes());
+
+        Promise.all(promises)
+            .then((dataSets) => gerarGrafico(dataSets))
+    .catch((err) => console.log(err));
+
+    }
+
     function gerarGrafico(datasets) {
         let ctx = $('#areaChart').get(0).getContext('2d');
         let myChart = new Chart(ctx, {
@@ -23,29 +40,12 @@
         });
     }
 
-    $(function () {
-        montarGrafico();
-    });
-
-    function montarGrafico() {
-
-        let promises = [];
-
-        promises.push(countQuantidadeVeiculosCompradosMes());
-        promises.push(countQuantidadeVeiculosVendidosMes());
-
-        Promise.all(promises)
-            .then((dataSets) => gerarGrafico(dataSets))
-            .catch((err) => console.log(err));
-
-    }
-
     function countQuantidadeVeiculosCompradosMes() {
         return new Promise((onSucces, onError) => {
             $.get({url: "../veiculos/countQuantidadeVeiculosCompradosMes", contentType: 'application/x-www-form-urlencoded; charset=utf8'})
             .then(onSucces)
             .catch(onError);
-        })
+    })
     }
 
     function countQuantidadeVeiculosVendidosMes() {
@@ -53,7 +53,7 @@
             $.get({url: "../veiculos/countQuantidadeVeiculosVendidosMes", contentType: 'application/x-www-form-urlencoded; charset=utf8'})
             .then(onSucces)
             .catch(onError);
-        })
+    })
     }
 
 })();
