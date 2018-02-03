@@ -1,66 +1,66 @@
 (function () {
 
     function gerarGrafico(datasets) {
-        /* ChartJS
-                 * -------
-                 * Here we will create a few charts using ChartJS
-                 */
-
-        //--------------
-        //- AREA CHART -
-        //--------------
-
-        // Get context with jQuery - using jQuery's .get() method.
-        var areaChartCanvas = $('#areaChart').get(0).getContext('2d');
-        // This will get the first returned node in the jQuery collection.
-        var areaChart       = new Chart(areaChartCanvas);
-
-        var areaChartData = {
-            labels  : ['Janeiro', 'Fevereiro', 'Março', 'Abril', 'Maio', 'Junho', 'Julho', 'Agosto', 'Setembro', 'Outubro', 'Novembro', 'Dezembro'],
-            datasets: datasets
-        };
-
-        var areaChartOptions = {
-            //Boolean - If we should show the scale at all
-            showScale               : true,
-            //Boolean - Whether grid lines are shown across the chart
-            scaleShowGridLines      : false,
-            //String - Colour of the grid lines
-            scaleGridLineColor      : 'rgba(0,0,0,.05)',
-            //Number - Width of the grid lines
-            scaleGridLineWidth      : 1,
-            //Boolean - Whether to show horizontal lines (except X axis)
-            scaleShowHorizontalLines: true,
-            //Boolean - Whether to show vertical lines (except Y axis)
-            scaleShowVerticalLines  : true,
-            //Boolean - Whether the line is curved between points
-            bezierCurve             : true,
-            //Number - Tension of the bezier curve between points
-            bezierCurveTension      : 0.3,
-            //Boolean - Whether to show a dot for each point
-            pointDot                : false,
-            //Number - Radius of each point dot in pixels
-            pointDotRadius          : 4,
-            //Number - Pixel width of point dot stroke
-            pointDotStrokeWidth     : 1,
-            //Number - amount extra to add to the radius to cater for hit detection outside the drawn point
-            pointHitDetectionRadius : 20,
-            //Boolean - Whether to show a stroke for datasets
-            datasetStroke           : true,
-            //Number - Pixel width of dataset stroke
-            datasetStrokeWidth      : 2,
-            //Boolean - Whether to fill the dataset with a color
-            datasetFill             : true,
-            //String - A legend template
-            legendTemplate          : '<ul class="<%=name.toLowerCase()%>-legend"><% for (var i=0; i<datasets.length; i++){%><li><span style="background-color:<%=datasets[i].lineColor%>"></span><%if(datasets[i].label){%><%=datasets[i].label%><%}%></li><%}%></ul>',
-            //Boolean - whether to maintain the starting aspect ratio or not when responsive, if set to false, will take up entire container
-            maintainAspectRatio     : true,
-            //Boolean - whether to make the chart responsive to window resizing
-            responsive              : true,
-        };
-
-        //Create the line chart
-        areaChart.Line(areaChartData, areaChartOptions);
+        var ctx = $('#areaChart').get(0).getContext('2d');
+        var myChart = new Chart(ctx, {
+            type: 'line',
+            data: {
+                labels: ['Janeiro','Fevereiro','Março','Abril','Maio','Junho',
+                    'Julho','Agosto','Setembro','Outubro','Novembro', 'Dezembro'],
+                datasets: datasets
+                // datasets: [{
+                //     label: '# of Votes',
+                //     data: [12, 19, 90, 5, 20, 3],
+                //     backgroundColor: [
+                //         'rgba(255, 99, 132, 0.2)',
+                //         'rgba(54, 162, 235, 0.2)',
+                //         'rgba(255, 206, 86, 0.2)',
+                //         'rgba(75, 192, 192, 0.2)',
+                //         'rgba(153, 102, 255, 0.2)',
+                //         'rgba(255, 159, 64, 0.2)'
+                //     ],
+                //     borderColor: [
+                //         'rgba(255,99,132,1)',
+                //         'rgba(54, 162, 235, 1)',
+                //         'rgba(255, 206, 86, 1)',
+                //         'rgba(75, 192, 192, 1)',
+                //         'rgba(153, 102, 255, 1)',
+                //         'rgba(255, 159, 64, 1)'
+                //     ],
+                //     borderWidth: 1
+                // },
+                //     {
+                //         label: '# of csasa',
+                //         data: [8, 30, 15, 5, 29, 7],
+                //         backgroundColor: [
+                //             'rgba(220, 199, 32, 0.2)',
+                //             'rgba(30, 102, 135, 0.2)',
+                //             'rgba(255, 26, 126, 0.2)',
+                //             'rgba(8, 129, 210, 0.2)',
+                //             'rgba(123, 122, 200, 0.2)',
+                //             'rgba(127, 195, 246, 0.2)'
+                //         ],
+                //         borderColor: [
+                //             'rgba(220, 199, 32, 1)',
+                //             'rgba(30, 102, 135, 1)',
+                //             'rgba(255, 26, 126, 1)',
+                //             'rgba(8, 129, 210, 1)',
+                //             'rgba(123, 122, 200, 1)',
+                //             'rgba(127, 195, 246, 1)'
+                //         ],
+                //         borderWidth: 1
+                //     }]
+            },
+            options: {
+                scales: {
+                    yAxes: [{
+                        ticks: {
+                            beginAtZero:true
+                        }
+                    }]
+                }
+            }
+        });
     }
 
     $(function () {
@@ -78,29 +78,9 @@
         promises.push(countDados());
 
         Promise.all(promises)
-            .then((notPromises) => {
-            let usedColors = [];
-        let usedRgbas = []
-        let datasets = notPromises.map((d) => {
-            let rgbaColor = getRamdomRGBA(usedRgbas);
-        let color = getRandomColor(usedColors);
-        let dataSet = {
-            label: d.label,
-            fillColor           : rgbaColor,
-            strokeColor         : rgbaColor,
-            pointColor          : rgbaColor,
-            pointStrokeColor    : color,
-            pointHighlightFill  : color,
-            pointHighlightStroke: rgbaColor,
-            data: d.data
-        };
-        return dataSet
-    });
+            .then((dataSets) => gerarGrafico(dataSets))
+            .catch((err) => console.log(err));
 
-        gerarGrafico(datasets);
-    }).catch((err) => {
-            console.log(err);
-    });
     }
 
 
@@ -109,7 +89,7 @@
             $.get({url: "../veiculos/countQuantidadeVeiculosMes", contentType: 'application/x-www-form-urlencoded; charset=utf8'})
             .then(onSucces)
             .catch(onError);
-        });
+        })
     }
 
     function getRandomColor(usedColors) {
@@ -124,11 +104,17 @@
         usedColors.push(color);
         return color;
     }
-    function getRamdomRGBA(usedRgbas) {
+    function getRamdomRGBA(usedRgbas, opacity) {
         let o = Math.round, r = Math.random, s = 255;
-        let opacity = r().toFixed(1);
-        opacity = opacity === '0.0' ? '0.3' : opacity;
-        let rgba = 'rgba(' + o(r()*s) + ',' + o(r()*s) + ',' + o(r()*s) + ',' + opacity + ')';
+        let opcaityUsed = null;
+        if (opacity) {
+            opacityUsed = opacity;
+        } else {
+            opacityUsed = r().toFixed(1);
+            opacityUsed = opacityUsed === '0.0' ? '0.3' : opacityUsed;
+        }
+
+        let rgba = 'rgba(' + o(r()*s) + ',' + o(r()*s) + ',' + o(r()*s) + ',' + opacityUsed + ')';
         if (usedRgbas.indexOf(rgba) > -1) {
             rgba =  getRamdomRGBA(usedRgbas);
         }
