@@ -16,7 +16,7 @@
         var areaChart       = new Chart(areaChartCanvas);
 
         var areaChartData = {
-            labels  : ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'Agosto', 'Setembro', 'Outubro', 'Novembro', 'Dezembro'],
+            labels  : ['Janeiro', 'Fevereiro', 'Março', 'Abril', 'Maio', 'Junho', 'Julho', 'Agosto', 'Setembro', 'Outubro', 'Novembro', 'Dezembro'],
             datasets: datasets
         };
 
@@ -99,6 +99,9 @@
 
 
         let promises = [];
+        promises.push(countDados());
+        promises.push(countDados());
+        promises.push(countDados());
         promises.push(countDados());
 
         Promise.all(promises)
