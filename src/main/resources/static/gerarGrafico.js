@@ -1,6 +1,6 @@
 (function () {
 
-    "use strict"
+    "use strict";
 
     function gerarGrafico(datasets) {
         let ctx = $('#areaChart').get(0).getContext('2d');
